@@ -15,7 +15,9 @@ const getCategoryList=async()=>{
   console.log(res)
 }
 getCategoryList()
-console.log("添加发布使时间过滤")
+
+console.log("修改按时间过滤功能")
+
 const deleteCategory=async(row)=>{
   await ElMessageBox.confirm(
     '你确定删除该分类信息吗？',
