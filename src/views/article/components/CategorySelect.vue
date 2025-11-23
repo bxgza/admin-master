@@ -11,6 +11,8 @@ defineProps({
     type:String
   }
 })
+
+console.log("UI optimize: 改进表格样式");
 const categoryList=ref([])
 //子传父
 const emit=defineEmits(['update:modelValue'])
