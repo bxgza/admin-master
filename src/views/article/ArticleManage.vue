@@ -14,7 +14,10 @@ import {
 const articleEditRef=ref()
 
 const articles=ref([])
-console.log("优化搜索，添加防抖")
+
+console.log("优化搜索功能")
+console.log("添加防抖")
+
 const total = ref(0)//总条数
 const params=ref({
     pagenum:1,
