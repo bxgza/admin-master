@@ -12,7 +12,27 @@ const getUserInfo=async()=>{
     userInf.userInfo=res.data
     console.log(userInf.userInfo)
 }
-onMounted(()=>getUserInfo())
+// 新增：更新时间的函数
+const updateTime = () => {
+  const now = new Date();
+  const pad = (n) => (n < 10 ? '0' + n : n);
+  currentTime.value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate()
+  )} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+};
+
+onMounted(() => {
+  getUserInfo(); // 原本的逻辑
+
+  updateTime();             // ← 初始化赋值
+  timer.value = setInterval(updateTime, 1000);  // ← 每秒更新时间
+});
+
+// 新增：清除定时器
+const timer = ref(null);
+onUnmounted(() => {
+  clearInterval(timer.value);
+});
 const handleCommand=(command)=>{
     if(command==='logout'){
         ElMessageBox.confirm(
@@ -99,6 +119,9 @@ const handleCommand=(command)=>{
             <el-header>
                 <div v-if="userInf.userInfo && userInf.userInfo.username">黑马程序员：<strong>{{userInf.userInfo.username}}</strong></div>
         <div v-else>加载中...</div>
+                <div style="margin-right: 20px; font-size: 14px; color: #666;">
+                    {{ currentTime }}
+                </div>
                 <!-- 下拉菜单 -->
                 <!-- command: 条目被点击后会触发,在事件函数上可以声明一个参数,接收条目对应的指令 -->
                 <el-dropdown placement="bottom-end" @command="handleCommand">
