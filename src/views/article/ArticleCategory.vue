@@ -16,23 +16,32 @@ const getCategoryList=async()=>{
 }
 getCategoryList()
 console.log("发布使时间过滤添加")
-const deleteCategory=async(row)=>{
+const deleteCategory = async (row) => {
   await ElMessageBox.confirm(
-    '你确定删除该分类信息吗？',
-    '温馨提示',
+    '确定要删除【' + row.name + '】分类吗？删除后无法恢复！',
+    '删除确认',
     {
-      confirmButtonText:'确认',
-      cancelButtonText:'取消',
-      type:'warning'
+      confirmButtonText: '确定删除',
+      cancelButtonText: '再想想',
+      type: 'error',
+      confirmButtonClass: 'el-button--danger'
     }
   )
-   
-    console.log('点击删除')
-    const res=await deleteCategoryAPI(row.id)
-    ElMessage.success(res.message?res.message:'删除成功')
+  
+  try {
+    console.log('开始删除分类:', row.name)
+    const res = await deleteCategoryAPI(row.id)
+    ElMessage.success(res.message || '分类删除成功')
     
-    getCategoryList()
-
+    // 刷新分类列表
+    await getCategoryList()
+    
+    // 显示删除的分类名称
+    ElMessage.info(`已删除分类: ${row.name}`)
+  } catch (error) {
+    ElMessage.error('删除失败: ' + error.message)
+    console.error('删除分类失败:', error)
+  }
 }
 const onAddCategory=()=>{
   console.log('添加')
